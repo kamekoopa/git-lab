@@ -1,0 +1,48 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+
+def define_requests_opts(parser):
+    from git_lab.apis.mergerequest.services import ReferService
+    service = ReferService()
+
+    # Merge Request取得に関するパラメータ
+    req_sub_parsers = parser.add_subparsers(title="operations of merge request")
+
+    # 1件取得
+    show_parser = req_sub_parsers.add_parser("show", help="fetch a single merge request")
+    show_parser.add_argument(
+        "req_id", type=int,
+        help="specify id of merge request"
+    )
+    show_parser.set_defaults(func=service.show_merge_request)
+
+    # 一覧取得
+    list_parser = req_sub_parsers.add_parser("list", help="fetch merge requests")
+    list_parser.add_argument(
+        "-p", "--page", type=int, default=1,
+        help="if fetch requests list, specify start page count"
+    )
+    list_parser.add_argument(
+        "-c", "--count", type=int, default=20,
+        help="if fetch requests list, specify fetch count per page"
+    )
+    list_parser.set_defaults(func=service.list_merge_request)
+
+
+if __name__ == '__main__':
+    import argparse
+
+    arg_parser = argparse.ArgumentParser(description="gitlab cli tool as the sub command of git")
+    sub_parsers = arg_parser.add_subparsers(title="sub commands")
+
+    # Merge Request取得
+    req_parser = sub_parsers.add_parser("requests", help="fetch merge request(s)")
+    define_requests_opts(req_parser)
+
+    parsed = arg_parser.parse_args()
+
+    copied_vars = vars(parsed).copy()
+    copied_vars.pop("func")
+
+    parsed.func(**copied_vars)

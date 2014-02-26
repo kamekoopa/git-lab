@@ -1,2 +1,7 @@
 *.pyc
-
+*.iml
+.idea/
+dist/
+build/
+git_lab.egg-info
+gitlab.egg-info
