@@ -6,10 +6,14 @@ requires = [
     "pyapi-gitlab==6.1.6",
 ]
 
+with open("README.rst") as f:
+    readme = f.read()
+
 setup(
     name="git-lab",
     version=version,
     description="sub-command of git for access to gitlab",
+    long_description=readme,
     author="kamekoopa",
     author_email="hogehugo@gmail.com",
     url="https://github.com/kamekoopa/git-lab",
