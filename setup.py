@@ -12,7 +12,7 @@ setup(
     description="sub-command of git for access to gitlab",
     author="kamekoopa",
     author_email="hogehugo@gmail.com",
-    url="",
+    url="https://github.com/kamekoopa/git-lab",
     packages=find_packages(),
     scripts=["git-lab"],
     install_requires=requires,
