@@ -1,8 +1,13 @@
 # git-lab
 gitlabにアクセスするためのgitのサブコマンド
 
+## Requirements
+Python 2.7
 
-## 設定
+## Installation
+`pip install git-lab`
+
+## Configuration
 git configに下記の設定項目を追加する
 
 ```
@@ -12,7 +17,7 @@ gitlab.private-token=privatetoken
 gitlab.project=namespace/project
 ```
 
-## 使い方
+## Usage
 詳しくはヘルプ
 
 `git lab requests show {id}`
