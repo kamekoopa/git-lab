@@ -15,5 +15,6 @@ setup(
     url="https://github.com/kamekoopa/git-lab",
     packages=find_packages(),
     scripts=["git-lab"],
+    license="Apache 2.0",
     install_requires=requires,
 )
