@@ -172,6 +172,3 @@ class EditService(object):
                 "dest_project": replace(project, u"/", u"%2F"),
                 "dest_branch": branch
             }
-
-if __name__ == "__main__":
-    EditService().create_request("gitlab_test/test:master", "mr_test1", "test")
