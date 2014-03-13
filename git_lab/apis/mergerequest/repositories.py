@@ -65,3 +65,29 @@ class MergeRequestRepository(object):
             for mr in mrs:
                 result.append(MergeRequest(mr))
             return result
+
+    def create_requests(self, source_branch, target_project_id, target_branch, title):
+        u"""
+        @param source_branch : 送り元ブランチ
+        @type  source_branch : str
+
+        @param target_project_id : 送り先プロジェクト
+        @type  target_project_id : str | None
+
+        @param target_branch : 送り先ブランチ
+        @type  target_branch : str
+
+        @param title : タイトル
+        @type  title : str
+
+        @return : 成否
+        @rtype : bool
+        """
+
+        return self.client.createmergerequest2(
+            self.project,
+            source_branch,
+            target_project_id,
+            target_branch,
+            title
+        )

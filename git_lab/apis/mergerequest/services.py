@@ -89,3 +89,89 @@ upvotes/downbotes : +{up} / -{down}
             )
 
             print m
+
+
+class EditService(object):
+    u"""マージリクエスト編集サービス"""
+
+    def __init__(self):
+        from git_lab.apis.mergerequest.repositories import MergeRequestRepository
+        from git_lab.apis.projects.repositories import ProjectsRepository
+
+        self.request_repo = MergeRequestRepository()
+        self.project_repo = ProjectsRepository()
+
+    def create_request(self, destination, source, title):
+        u"""マージリクエストを作成します
+        @param destination : 宛先({namespace}/{project}:{branch})
+        @type  destination : str
+
+        @param source : 作成元ブランチ名
+        @type  source : str | None
+
+        @param title : タイトル
+        @type  title : str | None
+        """
+        from git_lab.utils import get_current_branch
+
+        dest_info = EditService.parse_dest_spec(destination)
+        target_project = self.project_repo.get_project(dest_info["dest_project"])
+        target_project_id = target_project.get_id() if target_project is not None else None
+        target_branch = dest_info["dest_branch"]
+
+        source_branch = source if source is not None else get_current_branch()
+        title = title if title is not None else source_branch
+
+        if self.request_repo.create_requests(source_branch, target_project_id, target_branch, title):
+            print "created"
+        else:
+            print "failed"
+
+    @staticmethod
+    def parse_dest_spec(dest):
+        u"""宛先記述をパースする
+        None -> このプロジェクトのmaster
+        ":{branch}" -> このプロジェクトの{branch}
+        "{namespace/project}:" -> {namespace/project}のmaster
+        "{namespace/project}" -> {namespace/project}のmaster
+        "{namespace/project}:{branch}" -> {namespace/project}の{branch}
+
+        @type dest : str | None
+        @rtype : dict
+        """
+
+        from git_lab.utils import get_project
+        from string import replace
+
+        if dest is None:
+            return {
+                "dest_project": get_project(),
+                "dest_branch": "master"
+            }
+
+        elif ":" in dest:
+            proj, br = dest.split(":", 2)
+
+            project = replace(proj, u"/", u"%2F") if proj != "" else get_project()
+            branch = br if br != "" else "master"
+
+            return {
+                "dest_project": project,
+                "dest_branch": branch
+            }
+
+        elif ":" not in dest:
+            return {
+                "dest_project": replace(dest, u"/", u"%2F"),
+                "dest_branch": "master"
+            }
+
+        else:
+            project, branch = dest.split(":", 2)
+            return {
+                "dest_project": replace(project, u"/", u"%2F"),
+                "dest_branch": branch
+            }
+
+if __name__ == "__main__":
+    EditService().create_request("gitlab_test/test:master", "mr_test1", "test")

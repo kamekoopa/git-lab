@@ -76,3 +76,17 @@ def get_project():
     project = get_or_rise("gitlab.project")
 
     return replace(project, u"/", u"%2F")
+
+
+def get_current_branch():
+    u"""現在のブランチ名を取得する"""
+
+    from subprocess import check_output
+    from subprocess import CalledProcessError
+
+    try:
+        out = check_output(["git", "rev-parse", "--abbrev-ref", "HEAD"])
+    except CalledProcessError:
+        out = None
+
+    return out

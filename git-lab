@@ -3,8 +3,9 @@
 
 
 def define_requests_opts(parser):
-    from git_lab.apis.mergerequest.services import ReferService
-    service = ReferService()
+    from git_lab.apis.mergerequest.services import ReferService, EditService
+    refer_service = ReferService()
+    edit_service = EditService()
 
     # Merge Request取得に関するパラメータ
     req_sub_parsers = parser.add_subparsers(title="operations of merge request")
@@ -15,7 +16,7 @@ def define_requests_opts(parser):
         "req_id", type=int,
         help="specify id of merge request"
     )
-    show_parser.set_defaults(func=service.show_merge_request)
+    show_parser.set_defaults(func=refer_service.show_merge_request)
 
     # 一覧取得
     list_parser = req_sub_parsers.add_parser("list", help="fetch merge requests")
@@ -27,7 +28,25 @@ def define_requests_opts(parser):
         "-c", "--count", type=int, default=20,
         help="if fetch requests list, specify fetch count per page"
     )
-    list_parser.set_defaults(func=service.list_merge_request)
+    list_parser.set_defaults(func=refer_service.list_merge_request)
+
+    # MR作成
+    create_parser = req_sub_parsers.add_parser("create", help="create merge request")
+    create_parser.add_argument(
+        "-d", "--destination", type=str, default=None,
+        help="""specify destination of merge request ({namespace}/{project}:{branch}).
+When omitted the project spec, current project is used.
+When omitted the branch name, "master" is used."""
+    )
+    create_parser.add_argument(
+        "-s", "--source", type=str, default=None,
+        help="specify source branch name of merge request (default is current branch)"
+    )
+    create_parser.add_argument(
+        "-t", "--title", type=str, default=None,
+        help="specify title of merge request (default is content of source option)"
+    )
+    create_parser.set_defaults(func=edit_service.create_request)
 
 
 if __name__ == '__main__':
