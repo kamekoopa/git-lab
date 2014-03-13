@@ -85,7 +85,7 @@ def get_current_branch():
     from subprocess import CalledProcessError
 
     try:
-        out = check_output(["git", "rev-parse", "--abbrev-ref", "HEAD"])
+        out = check_output(["git", "rev-parse", "--abbrev-ref", "HEAD"]).strip()
     except CalledProcessError:
         out = None
 
