@@ -29,7 +29,10 @@ class User(object):
         return self.created_at
 
     def __getattr__(self, name):
-        return self.user[name] if name in self.user else None
+        if self.user is not None:
+            return self.user[name] if name in self.user else None
+        else:
+            return None
 
 
 class MergeRequest(object):
