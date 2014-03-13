@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 version = "0.1.0"
 
 requires = [
-    "pyapi-gitlab==6.1.6",
+    "pyapi-gitlab==6.2.1",
 ]
 
 with open("README.rst") as f:

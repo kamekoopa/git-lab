@@ -24,6 +24,37 @@ class GitlabClient(Gitlab):
         else:
             return False
 
+    def createmergerequest2(
+        self, project_id, sourcebranch, targetprojectid, targetbranch, title, assignee_id=None, sudo=""
+    ):
+        """
+        Create a new merge request.
+        :param project_id: ID of the project originating the merge request
+        :param sourcebranch: name of the branch to merge from
+        :param targetprojectid: ID of the project to merge to
+        :param targetbranch: name of the branch to merge to
+        :param title: Title of the merge request
+        :param assignee_id: Assignee user ID
+        """
+        import requests
+
+        url_str = '{0}/{1}/merge_requests'.format(self.projects_url, project_id)
+        data = {'source_branch': sourcebranch,
+                'target_project_id': targetprojectid,
+                'target_branch': targetbranch,
+                'title': title,
+                'assignee_id': assignee_id}
+        if sudo != "":
+            data['sudo'] = sudo
+
+        request = requests.post(url_str, data=data, headers=self.headers,
+                                verify=self.verify_ssl)
+        if request.status_code == 201:
+            return True
+        else:
+
+            return False
+
 
 def get_client():
     u"""デフォルトのGitLabクライアントを取得する
