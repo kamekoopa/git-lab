@@ -122,6 +122,10 @@ class EditService(object):
         source_branch = source if source is not None else get_current_branch()
         title = title if title is not None else source_branch
 
+        print "creating merge request [%s] %s ---> %s:%s" % (
+            title, source_branch, target_project.get_name_with_namespace(), target_branch
+        )
+
         if self.request_repo.create_requests(source_branch, target_project_id, target_branch, title):
             print "created"
         else:
