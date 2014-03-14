@@ -1,5 +1,5 @@
 git-lab
-========
+=======
 gitlabにアクセスするためのgitのサブコマンド
 
 Requirements
@@ -30,3 +30,13 @@ Usage
 
    $ git lab requests show {id}
    $ git lab requests list
+
+
+Changes
+-------
+
+- 0.2
+    - add feature of create merge request
+- 0.1
+    - initial release
+    - show and list merge request(s)
