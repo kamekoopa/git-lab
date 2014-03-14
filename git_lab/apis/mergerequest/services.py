@@ -114,15 +114,15 @@ class EditService(object):
         """
         from git_lab.utils import get_current_branch
 
-        dest_info = EditService.parse_dest_spec(destination)
+        dest_info = EditService.parse_dest_spec(destination.decode("utf-8") if destination is not None else None)
         target_project = self.project_repo.get_project(dest_info["dest_project"])
         target_project_id = target_project.get_id() if target_project is not None else None
         target_branch = dest_info["dest_branch"]
 
-        source_branch = source if source is not None else get_current_branch()
-        title = title if title is not None else source_branch
+        source_branch = source.decode("utf-8") if source is not None else get_current_branch()
+        title = title.decode("utf-8") if title is not None else source_branch
 
-        print "creating merge request [%s] %s ---> %s:%s" % (
+        print u"creating merge request [%s] %s ---> %s:%s" % (
             title, source_branch, target_project.get_name_with_namespace(), target_branch
         )
 
